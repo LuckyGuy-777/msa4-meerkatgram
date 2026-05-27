@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Service 코드는, 마이바티스 와 소통하는 경향이다.
+// Service 코드는, 매퍼 인터페이스를 가진다.
+
 @Service
 @RequiredArgsConstructor // 생성자 대체 해주는 어노테이션
 public class PostService {
