@@ -1,5 +1,6 @@
 package com.msa4meerkatgram.global.errors;
 
+import com.msa4meerkatgram.global.errors.custom.InvalidTokenException;
 import com.msa4meerkatgram.global.errors.custom.NotRegisteredException;
 import com.msa4meerkatgram.global.response.GlobalRes;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,22 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
+
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<GlobalRes<String>> invalidTokenHandle(InvalidTokenException e){
+
+        return ResponseEntity.status(400).body(
+
+                GlobalRes.<String>builder()
+                        .code("E04")
+                        .message("토큰 이상")
+                        .data(e.getMessage())
+                        .build()
+        );
+    }
+
+
 
 
 

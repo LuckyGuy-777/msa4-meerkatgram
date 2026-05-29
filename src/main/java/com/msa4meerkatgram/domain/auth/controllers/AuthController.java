@@ -5,6 +5,7 @@ import com.msa4meerkatgram.domain.auth.requests.LoginReq;
 import com.msa4meerkatgram.domain.auth.responses.AuthRes;
 import com.msa4meerkatgram.domain.auth.services.AuthService;
 import com.msa4meerkatgram.global.response.GlobalRes;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,21 @@ public class AuthController {
                         .build()
         );
     }
+
+    // 새로운 인증정보 생성 로직
+    @PostMapping("/reissue-token")
+    public ResponseEntity<GlobalRes<AuthRes>> reissue(
+            HttpServletRequest request
+            , HttpServletResponse response
+    ) {
+        return ResponseEntity.status(200).body(
+                GlobalRes.<AuthRes>builder()
+                        .code("00")
+                        .message("토큰 재발급 완료")
+                        .data(authService.reissue(request,response))
+                        .build()
+        );
+    }
 }
 
 
@@ -43,9 +59,9 @@ public class AuthController {
 
 /*
 *
+* 없던데이터를 만들어서 다시 response 해주는것도
+* postmapping 이라고 봐도된다
 *
-*
-*
-*
-*
+*HttpServletRequest request : 아이피번호, 언제들어왔냐, 등등이 들어있다고함
+* HttpServletResponse response : 새로운 리프레시토큰 등.. 유저에게 반환될 값이 담김
 * */
