@@ -5,6 +5,8 @@ import com.msa4meerkatgram.global.errors.custom.NotRegisteredException;
 import com.msa4meerkatgram.global.response.GlobalRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,7 +24,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotRegisteredException.class)
     public ResponseEntity<GlobalRes<String>> notRegisteredHandle(NotRegisteredException e){
 
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(401).body(
 
                 GlobalRes.<String>builder()
                         .code("E01")
@@ -33,10 +35,41 @@ public class GlobalExceptionHandler {
     }
 
 
+
+    // 인증에러
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<GlobalRes<String>> authenticationHandle(AuthenticationException e){
+
+        return ResponseEntity.status(401).body(
+
+                GlobalRes.<String>builder()
+                        .code("E01")
+                        .message("UNAUTHENTICATED_ERROR")
+                        .data("로그인이 필요한 서비스 입니다.")
+                        .build()
+        );
+    }
+
+
+    // 권한에러
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<GlobalRes<String>> accessDeniedHandle(AccessDeniedException e){
+        return ResponseEntity.status(403).body(
+                GlobalRes.<String>builder()
+                        .code("E03")
+                        .message("UNAUTHORIZED_ERROR")
+                        .data("권한이 부족합니다  .")
+                        .build()
+        );
+    }
+
+
+
+
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<GlobalRes<String>> invalidTokenHandle(InvalidTokenException e){
 
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(401).body(
 
                 GlobalRes.<String>builder()
                         .code("E04")

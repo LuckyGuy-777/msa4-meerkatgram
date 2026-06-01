@@ -14,7 +14,9 @@ import com.msa4meerkatgram.global.security.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -27,6 +29,7 @@ public class AuthService {
     private final AuthMapper authMapper;
     private final CookieManager cookieManager;
     private final JwtConfig jwtConfig;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthRes login(HttpServletResponse response, LoginReq loginReq){
         // 유저정보 획득
@@ -38,8 +41,12 @@ public class AuthService {
             throw new NotRegisteredException("아이디와 비밀번호를 확인해주세요.");
         }
 
+        // @bean 으로 등록하면, 자동완성할때 뜨는거같음
 
         // 비밀번호 체크
+        if(!passwordEncoder.matches(loginReq.password(), user.getPassword())) {
+            throw new NotRegisteredException("아이디와 비밀번호를 확인해주세요.");  // 보안때문에, 아이디 예외문구와 같은 문구.
+        }
 
         return this.generateAuthentication(response,user);
     }
@@ -103,6 +110,31 @@ public class AuthService {
                 ).build();
     }
 
+    // @Transactional(rollbackFor = Exception.class) : 어떤 예외가 발생해도 롤백한다
+    @Transactional(rollbackFor = Exception.class)
+    public void logout(HttpServletResponse response, long id) {
+
+        // 유저 정보 획득
+        User user = userMapper.findByPk(id);
+
+        if(user == null) {
+            throw new InvalidTokenException("유효하지 않은 회원의 토큰입니다.");
+        }
+
+
+        // DB 에 저장한 리프레시 토큰 파기
+        authMapper.updateRefreshToken(id, null);
+
+        // Cookie에 저장한 리프레시 토큰 파기
+        cookieManager.setCookie(
+                response
+                ,jwtConfig.refreshTokenCookieName()
+                ,null
+                ,0
+                ,jwtConfig.reissUri()
+        );
+    }
+
 }
 
 
@@ -118,4 +150,6 @@ public class AuthService {
 *  DB에 접근. 유저메퍼에서, 아이디를 가져온 값과, 리프레시토큰을 인수로 주고,
 *  db 에 업데이트 시킴
 *
+*   ,jwtConfig.reissUri()
+*    url 까지 같아야 같은 쿠키로 인식하고, 쿠키 초기화해줌
 * */

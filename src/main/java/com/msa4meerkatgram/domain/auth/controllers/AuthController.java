@@ -5,11 +5,13 @@ import com.msa4meerkatgram.domain.auth.requests.LoginReq;
 import com.msa4meerkatgram.domain.auth.responses.AuthRes;
 import com.msa4meerkatgram.domain.auth.services.AuthService;
 import com.msa4meerkatgram.global.response.GlobalRes;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +51,27 @@ public class AuthController {
                         .build()
         );
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<GlobalRes<String>> logout(
+        HttpServletResponse response
+        ,@AuthenticationPrincipal Claims claims
+    ) {
+        authService.logout(response,Long.parseLong(claims.getSubject()));
+
+        return ResponseEntity.status(200).body(
+                GlobalRes.<String>builder()
+                        .code("00")
+                        .message("로그아웃 완료")
+                        .build()
+        );
+    }
+
+    // @AuthenticationPrincipal  는,
+    // Spring Security에서 로그인한 사용자 정보를 컨트롤러(Controller)의
+    // 파라미터로 직접 주입받을 수 있게 해주는 어노테이션
+
+
 }
 
 
