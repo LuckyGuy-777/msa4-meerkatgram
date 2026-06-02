@@ -1,5 +1,6 @@
 package com.msa4meerkatgram.global.errors;
 
+import com.msa4meerkatgram.global.errors.custom.DeletedRecordException;
 import com.msa4meerkatgram.global.errors.custom.InvalidTokenException;
 import com.msa4meerkatgram.global.errors.custom.NotRegisteredException;
 import com.msa4meerkatgram.global.response.GlobalRes;
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(401).body(
 
                 GlobalRes.<String>builder()
-                        .code("E01")
+                        .code("E02")
                         .message("UNAUTHENTICATED_ERROR")
                         .data("로그인이 필요한 서비스 입니다.")
                         .build()
@@ -79,6 +80,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(DeletedRecordException.class)
+    public ResponseEntity<GlobalRes<String>> deletedRecordHandle(DeletedRecordException e){
+
+        return ResponseEntity.status(401).body(
+
+                GlobalRes.<String>builder()
+                        .code("E10")
+                        .message("DELETED_RECORD_ERROR")
+                        .data(e.getMessage())
+                        .build()
+        );
+    }
 
 
 
