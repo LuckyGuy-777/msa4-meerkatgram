@@ -10,6 +10,7 @@ public record UserRes(
         ,String role
         ,String profile
         ,String createdAt
+        ,long countPosts
 ) {
 }
 

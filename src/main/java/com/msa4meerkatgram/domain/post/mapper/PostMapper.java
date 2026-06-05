@@ -16,7 +16,7 @@ public interface PostMapper {
 
     Post findByPk(long id);
 
-
+    long countPostByUserId(long id);
 
 }
 

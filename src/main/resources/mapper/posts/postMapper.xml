@@ -46,6 +46,16 @@
             AND id = #{id}
     </select>
 
+
+    <select id="countPostByUserId" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM posts
+        WHERE
+                deleted_at IS NULL
+            AND user_id = #{userId}
+    </select>
+
 </mapper>
 
 <!--

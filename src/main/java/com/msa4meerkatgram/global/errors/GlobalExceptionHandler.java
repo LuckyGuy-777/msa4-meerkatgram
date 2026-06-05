@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 
 // 이 클래스에, 내가만든 예외파일을 만든것을 넣어줘야, 예외시에, 내가 작성한 예외처리가 작동함
+// 내가 만든 예외사항을 띄우기위해..
 
 @Slf4j
 @RestControllerAdvice
@@ -201,11 +203,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GlobalRes<String>> othersHandle(Exception e) {
-        log.error(String.format(
-                "시스템 에러: %s\n  %s"
-                , e.getMessage()
-                ,Arrays.toString(e.getStackTrace())
-                )
+        log.error(
+                "시스템 에러:" , e
         );
 
         return ResponseEntity.status(500).body(
@@ -217,6 +216,29 @@ public class GlobalExceptionHandler {
         );
 
     }
+
+
+    // SQL 관련 에러들은, 이 예외를 통한다.
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<GlobalRes<String>> sqlHandle(SQLException e) {
+        log.error("DB 에러:" , e);
+        return ResponseEntity.status(500).body(
+                GlobalRes.<String>builder()
+                        .code("E80")
+                        .message("DB 에러")
+                        .data("현재 서비스 이용이 불가합니다. 잠시후 다시 시도해 주십시오")
+                        .build()
+        );
+
+    }
+
+
+
+
+
+
+
+
 }
 
 // 400 번에, E21
