@@ -2,6 +2,7 @@ package com.msa4meerkatgram.domain.post.services;
 
 import com.msa4meerkatgram.domain.post.entities.Post;
 import com.msa4meerkatgram.domain.post.mapper.PostMapper;
+import com.msa4meerkatgram.domain.post.requests.PostCreateReq;
 import com.msa4meerkatgram.domain.post.requests.PostIndexReq;
 import com.msa4meerkatgram.domain.post.responses.PostIndexRes;
 import com.msa4meerkatgram.global.errors.custom.DeletedRecordException;
@@ -50,5 +51,10 @@ public class PostService {
         }
 
         return post;
+    }
+
+
+    public Post createPost(PostCreateReq postCreateReq) {
+
     }
 }

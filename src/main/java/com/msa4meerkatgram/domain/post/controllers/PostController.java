@@ -1,6 +1,7 @@
 package com.msa4meerkatgram.domain.post.controllers;
 
 import com.msa4meerkatgram.domain.post.entities.Post;
+import com.msa4meerkatgram.domain.post.requests.PostCreateReq;
 import com.msa4meerkatgram.domain.post.requests.PostIndexReq;
 import com.msa4meerkatgram.domain.post.responses.PostIndexRes;
 import com.msa4meerkatgram.domain.post.services.PostService;
@@ -8,10 +9,7 @@ import com.msa4meerkatgram.global.response.GlobalRes;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor // 필드 만 생성해도, 해당하는 생성자를 만들어주는 어노테이션
 @RestController
@@ -51,6 +49,24 @@ public class PostController {
                         .build()
         );
     }
+
+
+    // 1. 먼저 해야할일.
+    // GetMapping 진행
+    @PostMapping("/newpost")
+    public ResponseEntity<GlobalRes<PostIndexRes>> createPost (
+            @RequestBody PostCreateReq postCreateReq
+            ) {
+
+        return ResponseEntity.status(200).body(
+                GlobalRes.<PostIndexRes>builder()
+                        .code("00")
+                        .message("정상처리")
+                        .data()
+                        .build()
+        );
+    }
+
 
 }
 
