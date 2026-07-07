@@ -24,7 +24,8 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "BIGINT UNSIGNED")
-    private long id;
+    private Long id;
+    // 이 필드의 값이 null 이 올수 있기에, long(primitive) 은 쓰면안됨
 
     @Column(name = "content", nullable = false, length = 200)
     private String content;
@@ -57,6 +58,13 @@ public class Post {
 // EAGER 은, 즉시로딩, LAZY 는 지연로딩
 // "연관된 데이터를 데이터베이스에서 언제 조회할 것인가?"를 결정하는 로딩 옵션
 // "지금 당장 한 번에 다 가져올래(EAGER), 아니면 나중에 진짜 필요할 때 가져올래(LAZY)?"의 차이
+
+// EGAR 로딩은, 불필요한 조인이 발생할 수 있따.
+// -> EX  XX정보가 만 필요한데, NN정보가 조인되서 그 정보도 가져옴
+
+// LAZY 로딩은 N+1 문제가 발생함.
+// -> 일단 POST 데이터 다 들고 오고, 프록시라는 객체를 USER에 채워넣음.
+// -> 스프링부트의 잭슨 이라는 객체가 시리얼라이징ㅋ
 
 
 

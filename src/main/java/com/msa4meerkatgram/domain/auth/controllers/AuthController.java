@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class AuthController {
     private final AuthService authService;
-
+//
     @PostMapping("/login")
     public ResponseEntity<GlobalRes<AuthRes>> login(
             @Valid @RequestBody LoginReq loginReq
@@ -52,6 +52,8 @@ public class AuthController {
                         .build()
         );
     }
+
+
 
     @PostMapping("/logout")
     public ResponseEntity<GlobalRes<String>> logout(
