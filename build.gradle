@@ -29,6 +29,7 @@ dependencies {
 
     // 아래의 4개의 의존성은, QueryDSL 임
     implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.16'
     annotationProcessor "com.querydsl:querydsl-apt:5.1.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
