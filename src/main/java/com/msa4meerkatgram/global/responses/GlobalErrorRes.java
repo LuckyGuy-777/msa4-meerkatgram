@@ -1,4 +1,4 @@
-package com.msa4meerkatgram.global.response;
+package com.msa4meerkatgram.global.responses;
 
 
 public record GlobalErrorRes(

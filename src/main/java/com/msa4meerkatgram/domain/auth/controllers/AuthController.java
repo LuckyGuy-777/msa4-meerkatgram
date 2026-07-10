@@ -6,7 +6,7 @@ import com.msa4meerkatgram.domain.auth.requests.RegistrationReq;
 import com.msa4meerkatgram.domain.auth.responses.AuthRes;
 import com.msa4meerkatgram.domain.auth.services.AuthService;
 import com.msa4meerkatgram.global.annotations.openapi.ApiNotValidErrorResponse;
-import com.msa4meerkatgram.global.response.GlobalRes;
+import com.msa4meerkatgram.global.responses.GlobalRes;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,13 +37,8 @@ public class AuthController {
             @Valid @RequestBody LoginReq loginReq
             , HttpServletResponse response
     ) {
-        return ResponseEntity.status(200).body(
-                GlobalRes.<AuthRes>builder()
-                        .code("00")
-                        .message("로그인 완료")
-                        .data(authService.login(response,loginReq))
-                        .build()
-        );
+        return ResponseEntity.ok(GlobalRes.success(authService.login(response,loginReq)));
+
     }
 
     // 새로운 인증정보 생성 로직
@@ -52,45 +47,30 @@ public class AuthController {
             HttpServletRequest request
             , HttpServletResponse response
     ) {
-        return ResponseEntity.status(200).body(
-                GlobalRes.<AuthRes>builder()
-                        .code("00")
-                        .message("토큰 재발급 완료")
-                        .data(authService.reissue(request,response))
-                        .build()
-        );
+        return ResponseEntity.ok(GlobalRes.success(authService.reissue(request,response)));
+
     }
 
 
 
     @PostMapping("/logout")
-    public ResponseEntity<GlobalRes<String>> logout(
+    public ResponseEntity<GlobalRes<Void>> logout(
         HttpServletResponse response
         ,@AuthenticationPrincipal Claims claims
     ) {
         authService.logout(response,Long.parseLong(claims.getSubject()));
 
-        return ResponseEntity.status(200).body(
-                GlobalRes.<String>builder()
-                        .code("00")
-                        .message("로그아웃 완료")
-                        .build()
-        );
+        return ResponseEntity.ok(GlobalRes.success());
     }
 
 
     @PostMapping("/registration")
-    public ResponseEntity<GlobalRes<String>> registration(
+    public ResponseEntity<GlobalRes<Void>> registration(
         @Valid @RequestBody RegistrationReq registrationReq
         ) {
         authService.registration(registrationReq);
 
-        return ResponseEntity.status(200).body(
-                GlobalRes.<String>builder()
-                        .code("00")
-                        .message("회원가입 완료")
-                        .build()
-        );
+        return ResponseEntity.ok(GlobalRes.success());
     }
 
 

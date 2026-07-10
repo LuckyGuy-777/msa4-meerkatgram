@@ -5,7 +5,7 @@ import com.msa4meerkatgram.domain.post.responses.PostIndexRes;
 import com.msa4meerkatgram.domain.post.responses.PostWithUserRes;
 import com.msa4meerkatgram.domain.post.services.PostService;
 import com.msa4meerkatgram.global.annotations.openapi.ApiNotValidErrorResponse;
-import com.msa4meerkatgram.global.response.GlobalRes;
+import com.msa4meerkatgram.global.responses.GlobalRes;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +28,7 @@ public class PostController {
     @ApiNotValidErrorResponse
     @GetMapping("/posts")
     public ResponseEntity<GlobalRes<PostIndexRes>> index(PostIndexReq postIndexReq) {
-
-        PostIndexRes postIndexRes = postService.index(postIndexReq);
-
-        return ResponseEntity.status(200).body(
-                GlobalRes.<PostIndexRes>builder()
-                        .code("00")
-                        .message("정상처리")
-                        .data(postIndexRes)
-                        .build()
-        );
+        return ResponseEntity.ok(GlobalRes.success(postService.index(postIndexReq)));
     }
 
 
@@ -45,15 +36,7 @@ public class PostController {
     public ResponseEntity<GlobalRes<PostWithUserRes>> show(
             @Min(value = 1, message = "1이상 숫자만 허용") @PathVariable long id
     ) {
-        PostWithUserRes result = postService.show(id);
-
-        return ResponseEntity.status(200).body(
-                GlobalRes.<PostWithUserRes>builder()
-                        .code("00")
-                        .message("게시글 상세 정상 처리")
-                        .data(result)
-                        .build()
-        );
+        return ResponseEntity.ok(GlobalRes.success(postService.show(id)));
     }
 
 }

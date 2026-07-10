@@ -3,7 +3,7 @@ package com.msa4meerkatgram.domain.file.controller;
 
 import com.msa4meerkatgram.domain.file.responses.FileRes;
 import com.msa4meerkatgram.domain.file.services.FileService;
-import com.msa4meerkatgram.global.response.GlobalRes;
+import com.msa4meerkatgram.global.responses.GlobalRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,13 +22,7 @@ public class FileController {
     public ResponseEntity<GlobalRes<FileRes>> storeProfile(
             @ModelAttribute MultipartFile file
     ){
-        return ResponseEntity.status(200).body(
-                GlobalRes.<FileRes>builder()
-                        .code("00")
-                        .message("파일 저장 성공")
-                        .data(fileService.storeProfile(file))
-                        .build()
-        );
+        return ResponseEntity.ok(GlobalRes.success(fileService.storeProfile(file)));
     }
 
 
@@ -36,14 +30,10 @@ public class FileController {
     public ResponseEntity<GlobalRes<FileRes>> storePosts(
             @ModelAttribute MultipartFile file
     ){
-        return ResponseEntity.status(200).body(
-                GlobalRes.<FileRes>builder()
-                        .code("00")
-                        .message("파일 저장 성공")
-                        .data(fileService.storePosts(file))
-                        .build()
-        );
+        return ResponseEntity.ok(GlobalRes.success(fileService.storePosts(file)));
     }
+
+
 }
 
 
