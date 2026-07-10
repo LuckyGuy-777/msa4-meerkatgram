@@ -4,7 +4,6 @@ import com.msa4meerkatgram.domain.post.requests.PostIndexReq;
 import com.msa4meerkatgram.domain.post.responses.PostIndexRes;
 import com.msa4meerkatgram.domain.post.responses.PostWithUserRes;
 import com.msa4meerkatgram.domain.post.services.PostService;
-import com.msa4meerkatgram.global.annotations.openapi.ApiNotValidErrorResponse;
 import com.msa4meerkatgram.global.responses.GlobalRes;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.constraints.Min;
@@ -25,7 +24,6 @@ public class PostController {
     // 1. 먼저 해야할일.
     // GetMapping 진행
     @ApiResponse(responseCode = "200", description = "게시글 목록 획득 성공")
-    @ApiNotValidErrorResponse
     @GetMapping("/posts")
     public ResponseEntity<GlobalRes<PostIndexRes>> index(PostIndexReq postIndexReq) {
         return ResponseEntity.ok(GlobalRes.success(postService.index(postIndexReq)));

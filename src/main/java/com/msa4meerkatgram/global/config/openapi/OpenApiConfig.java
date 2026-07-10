@@ -1,4 +1,4 @@
-package com.msa4meerkatgram.global.config.swagger;
+package com.msa4meerkatgram.global.config.openapi;
 
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SwaggerConfig {
+public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
